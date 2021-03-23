@@ -24,12 +24,20 @@ def comp_total():
     comp_total = sum(comp_cards)
     return comp_total
 
-deal_cards()
+user_cards = [11, 10, 2]
 
 if user_total() > 21:
+    if 11 in user_cards:
+        for i in range(0, len(user_cards)):
+            if user_cards[i] == 11:
+                print(user_cards)
+                user_cards[i] = 1
+                print(user_cards)
+                
     print(f"Your total is over 21 with {user_total}. Bust!")
 
 else:
     print(user_total())
-    
+
+print(user_total())
 print(comp_total())
