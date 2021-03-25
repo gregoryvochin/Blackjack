@@ -21,6 +21,9 @@ def deal_cards():
 def hit():
     user_cards.append(random.choice(cards))
 
+def dealer_hit():
+    comp_cards.append(random.choice(cards))
+
 def stand():
     print("You end your turn!")
 
@@ -32,9 +35,12 @@ def comp_total():
     comp_total = sum(comp_cards)
     return comp_total
 
-deal_cards()
+#deal_cards()
 
-def blackjack(user_total = user_total, comp_total = comp_total):
+user_cards = [10, 11]
+comp_cards = [10, 2]
+
+def user_blackjack(user_total = user_total, comp_total = comp_total):
     winOrLose = None
     hitOrStand = None
     
@@ -42,10 +48,20 @@ def blackjack(user_total = user_total, comp_total = comp_total):
     comp_total = comp_total()
     
     if user_total == 21:
-        print("Blackjack!")
+        if len(user_cards) == 2:
+            print("Blackjack!")
+            if comp_total < 17:
+                dealer_blackjack()
+                return
+            else:
+                print("You win!")
+                winOrLose = True
+                return winOrLose
         if comp_total == 21:
             print("Push!")
             return winOrLose
+        if comp_total < 17:
+            dealer_blackjack()
         else:
             print("You win!")
             winOrLose = True
@@ -57,9 +73,9 @@ def blackjack(user_total = user_total, comp_total = comp_total):
                 if user_cards[card] == 11:
                     user_cards[card] = 1
                     print(f"You went over 21, but had an Ace! Your new cards are {user_cards}")
-                    blackjack()
+                    user_blackjack()
         else:
-            print(f"Bust! Your total ({user_total}) went over 21!")
+            print(f"Bust! Your total of {user_total} went over 21!")
             winOrLose = False
             return winOrLose
 
@@ -70,9 +86,61 @@ def blackjack(user_total = user_total, comp_total = comp_total):
         if hitOrStand == "hit":
             hit()
             print(user_cards)
-            blackjack()
+            user_blackjack()
+        elif hitOrStand == "stand":
+            stand()
+            dealer_blackjack()
 
-blackjack()
+def dealer_blackjack(user_total = user_total, comp_total = comp_total):
+    winOrLose = None
+    hitOrStand = None
+    
+    user_total = user_total()
+    comp_total = comp_total()
+
+    print(comp_cards)
+
+    if comp_total < 17:
+        dealer_hit()
+        dealer_blackjack()
+
+    elif comp_total > 21:
+        print(f"Dealer bust! Their total of {comp_total} went over 21!")
+        print("You win!")
+        winOrLose = True
+        return winOrLose
+
+    elif comp_total == 21:
+        if len(comp_cards) == 2:
+            if comp_total > user_total:
+                print("Dealer Blackjack!")
+                print("You lose!")
+                winOrLose = False
+                return winOrLose
+            elif comp_total == user_total:
+                print("Dealer Blackjack!")
+                print("Push!")
+        if comp_total > user_total:
+            print("You lose!")
+            winOrLose = False
+            return winOrLose
+        elif comp_total == user_total:
+            print("Push!")
+
+    elif comp_total > user_total and comp_total <= 21:
+        print("Dealer wins!")
+        winOrLose = False
+        return winOrLose
+
+    elif comp_total == user_total:
+        print("Push!")
+
+    else:
+        print("You win!")
+        winOrLose = True
+        return winOrLose
+
+user_blackjack()
 
 print(user_total())
 print(comp_total())
