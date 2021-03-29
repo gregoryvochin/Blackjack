@@ -35,10 +35,12 @@ def comp_total():
     comp_total = sum(comp_cards)
     return comp_total
 
-#deal_cards()
+def reset():
+    global user_cards
+    global comp_cards
 
-user_cards = [10, 11]
-comp_cards = [10, 2]
+    user_cards = []
+    comp_cards = []
 
 def user_blackjack(user_total = user_total, comp_total = comp_total):
     winOrLose = None
@@ -52,6 +54,9 @@ def user_blackjack(user_total = user_total, comp_total = comp_total):
             print("Blackjack!")
             if comp_total < 17:
                 dealer_blackjack()
+                return
+            elif comp_total == 21:
+                print("Push!")
                 return
             else:
                 print("You win!")
@@ -140,7 +145,4 @@ def dealer_blackjack(user_total = user_total, comp_total = comp_total):
         winOrLose = True
         return winOrLose
 
-user_blackjack()
 
-print(user_total())
-print(comp_total())
